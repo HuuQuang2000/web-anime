@@ -18,7 +18,7 @@ import Room from "../pages/chat/room/Room";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <LayoutMain/>,
+        element: <LayoutMain/>, // app load layer
         children: [
             {
                 path: "/contacts",
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
             },
 
             {
-                path: "/register-login",
+                path: "/",
                 element: <RegisterLogin/>
             }
             ,
@@ -54,21 +54,21 @@ const router = createBrowserRouter([
         element: <LayoutFooter/>,
         children: [
             {
-                path: "discover",
-                element: <Discover/>
+                path: "",
+                element: <Discover/> // homepage
             },
             {
                 path: "search",
-                element: <Search/>
+                element: <Search/> //
             },
             {
                 path: "profile",
-                element: <Profile/>
+                element: <Profile/> // user profile
             }
         ]
     },
     {
-        path: "/section",
+        path: "/view",
         element: <DefaultLayout/>,
         children: [
             {
@@ -79,8 +79,8 @@ const router = createBrowserRouter([
     }
     ,
     {
-        path: "/main-section",
-        element: <LayoutFooter2/>,
+        path: "/message",
+        element: <LayoutFooter/>, //
         children: [
             {
                 path: "chat",

@@ -10,7 +10,7 @@ export default function Photo() {
             <div className="absolute top-[46px] px-[16px]  z-10 text-[#ffffff]   ">
                 <div className="w-[129px] h-[38px] flex ">
                     <div className="w-[28px] h-[28px] mr-[8px]  justify-center items-center">
-                        <img className="w-full h-full" src={avatar}/>
+                        <img className="w-full h-full object-fill" src={avatar}/>
                     </div>
                     <div className="mt-[-2px]">
                         <div className="text-[#FFF] text-[13px] font-[700] leading-normal w-[40px] h-[15px]">
