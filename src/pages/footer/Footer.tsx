@@ -1,7 +1,7 @@
 import plus from '../../assets/images/discover/new.png';
 export default function Footer() {
     return (
-        <div className="pt-[9px] pb-[25px] px-[11px] border-t-[1px] border-t-[#b2b2b2] mt-[16px] fixed bottom-[0]  bg-[#ffffff]">
+        <div className="pt-[9px] pb-[25px] px-[11px] border-t-[1px] border-t-[#b2b2b2] mt-[16px] absolute left-0 bottom-[0]  bg-[#ffffff]">
             <div className="flex justify-center items-center gap-x-[31px] flex-shrink-0">
                 <div className="w-[40px] h-[40px] flex flex-col justify-center items-center">
                     <svg className="w-[24px] h-[24px]" data-slot="icon" fill="none"  stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
