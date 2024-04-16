@@ -14,7 +14,7 @@ import Profile from "../pages/profile/Profile";
 import Chat from "../pages/chat/Chat";
 import LayoutFooter2 from "../layouts/LayoutFooter2";
 import Room from "../pages/chat/room/Room";
-
+import Profile2 from "../pages/profile/Profile2";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -62,8 +62,12 @@ const router = createBrowserRouter([
                 element: <Search/> //
             },
             {
-                path: "profile",
+                path: "profile/:id",
                 element: <Profile/> // user profile
+            },
+            {
+                path: "profile",
+                element: <Profile2/> // user profile
             }
         ]
     },
@@ -72,9 +76,13 @@ const router = createBrowserRouter([
         element: <DefaultLayout/>,
         children: [
             {
-                path: "photo",
+                path: "photo/:id",
                 element: <Photo/>
-            }
+            },
+            {
+                path: "room/:id",
+                element: <Room/>
+            },
         ]
     }
     ,
@@ -86,11 +94,9 @@ const router = createBrowserRouter([
                 path: "chat",
                 element: <Chat/>
             },
-            {
-                path: "room",
-                element: <Room/>
-            }
+
         ]
+
     }
 ]);
 

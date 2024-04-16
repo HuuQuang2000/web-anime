@@ -4,7 +4,7 @@ import {Link, useParams} from "react-router-dom";
 import UserService from "../../services/UserService";
 import {data} from "autoprefixer";
 import UserFileService from "../../services/UserFileService";
-import RoomService from "../../services/RoomService";
+import {AuthService} from "../../services/AuthService";
 
 export default function Profile() {
     const [user, setUser] = useState<User>();
@@ -18,9 +18,6 @@ export default function Profile() {
         pathAvatar? : string,
         name?: string,
         username?: string,
-        files?: {
-            path : string,
-        },
     }
     function handleSeeMore() {
         setPageSize(pageSize + 10);
@@ -32,32 +29,20 @@ export default function Profile() {
     useEffect( () => {
         getDataUserFile();
     }, [user?.id, pageSize])
-
     async function getUser() {
         try {
-            const data = await UserService.getOneById({id});
+            const data = await AuthService.getProfile();
             setUser({
-                id: data?.data?.id,
+                id: data?.data?.sub,
                 path: data?.data?.path,
                 pathAvatar: data?.data?.pathAvatar,
                 username: data?.data?.username,
                 name: data?.data?.name,
-                files: data?.data.files
             });
         } catch (e) {
             console.log(e);
         }
         setLoading(false);
-    }
-    async function handleSendMessage() {
-       try {
-           const data = await RoomService.createByOneUser({userId: user?.id});
-           if (data.data){
-               window.location.href = "/view/room/"+data.data.id;
-           }
-       }catch (e) {
-           console.log(e);
-       }
     }
     interface userFile {
         path : string,
@@ -92,7 +77,7 @@ export default function Profile() {
         const images = userFiles.map(function (x, index) {
                 if (index % 2 == 0) {
                     return (
-                            <div className="w-full" key={index}>
+                            <div className="w-full">
                                 <img src={x.path} className=" w-full h-full" alt="Description of the first image"/>
                             </div>
                     )
@@ -102,7 +87,7 @@ export default function Profile() {
         const images2 = userFiles.map(function (x, index) {
                 if (index % 2 != 0) {
                     return (
-                            <div className="w-full" key={index}>
+                            <div className="w-full">
                                 <img src={x.path} className="w-full h-full" alt="Description of the first image"/>
                             </div>
                     )
@@ -149,9 +134,9 @@ export default function Profile() {
                 <div className="bg-[#67ECEC] text-[13px] font-[900] mt-[32px] px-[32px] py-[8px] rounded w-full text-center rounded-[6px] border-[2px] border-[#43B0B0] text-[#ffffff] uppercase cursor-pointer">
                     follow jane
                 </div>
-                <button onClick={()=>handleSendMessage()}  className="text-[13px] font-[900] mt-[16px] px-[32px] py-[8px] rounded w-full text-center rounded-[6px] border-[2px] border-[#43B0B0] text-[#43B0B0] uppercase cursor-pointer">
-                    send message
-                </button>
+                <div className="text-[13px] font-[900] mt-[16px] px-[32px] py-[8px] rounded w-full text-center rounded-[6px] border-[2px] border-[#43B0B0] text-[#43B0B0] uppercase cursor-pointer">
+                    see more
+                </div>
                 <div className="mt-[24px]">
                    <UserFilesRender />
                 </div>

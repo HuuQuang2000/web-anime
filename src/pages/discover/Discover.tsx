@@ -1,50 +1,95 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import slider from '../../assets/images/discover/slider.png';
 import avatar from '../../assets/images/discover/avatar.svg';
-import {Link} from "react-router-dom";
-import Footer from "../footer/Footer";
-export default function  Discover(){
-    interface Data {
-        path : string,
-    }
-    const [data , setData] = useState<Data[]>([
-        {
-            path: slider,
-        },
-        {
-            path: slider,
-        }
-        ,{
-            path: slider
-        }
-    ])
 
-    function Images(){
-        const images = data.map((x,index) => (
-            <div className="col-span-1">
-                <div className="w-full h-auto">
-                    <img src={slider} className="w-full h-full" />
-                </div>
-            </div>
-        ))
+import UserFileService from "../../services/UserFileService";
+import {Link} from "react-router-dom";
+export default function  Discover(){
+    const [pageSize, setPageSize] = useState(10);
+    const [loading, setLoading] = useState(false);
+    const [buttonClass,setButtonClass] = useState("hidden");
+    interface userFile {
+        path : string,
+        userId: number,
+        id : number
+    }
+    const [userFiles, setUserFiles] = useState<userFile[]>([])
+    async function getDataUserFile() {
+        setLoading(true);
+        try {
+            const data = await UserFileService.getAllUserFiles({
+                page: 0,
+                size: pageSize,
+                textSearch: "",
+            })
+            if (data.data.totalElements > pageSize){
+                setButtonClass("mt-[32px] w-full text-center py-[8px] rounded  rounded-[6px] border-[2px] border-[#43B0B0] text-[#43B0B0] capitalize cursor-pointer");
+            }else {
+                setButtonClass("hidden");
+            }
+
+            setLoading(false);
+            setUserFiles(data.data.content);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    useEffect(() => {
+        getDataUserFile();
+    }, [pageSize])
+
+    function handleSeeMore() {
+        setPageSize(pageSize + 10);
+    }
+     function UserFilesRender() {
+        const images = userFiles.map(function (x, index) {
+                if (index % 2 == 0) {
+                    return (
+                        <Link to={"/view/photo/" + x.id} key={index}>
+                            <div className="w-full">
+                                <img src={x.path} className=" w-full h-full" alt="Description of the first image"/>
+                            </div>
+                        </Link>
+                    )
+                }
+            }
+        )
+        const images2 = userFiles.map(function (x, index) {
+                if (index % 2 != 0) {
+                    return (
+                        <Link to={"/view/photo/" + x.id} key={index}>
+                            <div className="w-full">
+                                <img src={x.path} className="w-full h-full" alt="Description of the first image"/>
+                            </div>
+                        </Link>
+                    )
+                }
+            }
+        )
         return (
-            <div className="mt-[36px]">
-                <p className="text-[#23BABA] text-[13px] font-[900] uppercase tracking-[0.52px] leading-normal" >
+            <div className="mt-[36px] ">
+                <p className="text-[#23BABA] text-[13px] font-[900] uppercase tracking-[0.52px] leading-normal">
                     Browse all
                 </p>
                 <div className="mt-[24px]">
-                    <div className="grid grid-cols-2 gap-x-[12px] gap-y-[12px] ">
-                        {images}
+                    <div className="grid grid-cols-2 items-start gap-[12px]">
+                        <div>
+                            {images}
+                        </div>
+                        <div>
+                            {images2}
+                        </div>
                     </div>
                 </div>
+                <button disabled={loading} onClick={handleSeeMore} className={buttonClass}>
+                    see more
+                </button>
             </div>
         )
     }
-
-
     return (
-        <div>
-            <div className="w-full">
+        <>
+            <div className="w-full h-full overflow-auto overflow-x-hidden">
                 <div className="text-[#999] text-[36px] font-[400] leading-normal tracking-[-0.54px]">
                     Discover
                 </div>
@@ -71,13 +116,8 @@ export default function  Discover(){
                         </div>
                     </div>
                 </div>
-               <Images />
-                <Link to="/login">
-                    <div className="mt-[32px] w-full text-center py-[8px] rounded  rounded-[6px] border-[2px] border-[#43B0B0] text-[#43B0B0] capitalize cursor-pointer">
-                        log in
-                    </div>
-                </Link>
+                    <UserFilesRender />
             </div>
-        </div>
+        </>
     )
 }
